@@ -54,7 +54,9 @@ out = tf.case({tf.less(x, y): lambda:tf.add(x, y),
 # Hint: Look up tf.equal().
 ###############################################################################
 
-
+x = tf.constant([[0, -2, -1], [0, 1, 2]])
+y = tf.zeros_like(x)
+out = tf.equal(x, y)
 
 ###############################################################################
 # 1d: Create the tensor x of value 
@@ -68,8 +70,13 @@ out = tf.case({tf.less(x, y): lambda:tf.add(x, y),
 # Then extract elements whose values are greater than 30.
 # Hint: Use tf.gather().
 ###############################################################################
-
-# YOUR CODE
+x = tf.constant([29.05088806,  27.61298943,  31.19073486,  29.35532951,
+		        30.97266006,  26.67541885,  38.08450317,  20.74983215,
+		        34.94445419,  34.45999146,  29.06485367,  36.01657104,
+		        27.88236427,  20.56035233,  30.20379066,  29.51215172,
+		        33.71149445,  28.59134293,  36.05556488,  28.66994858])
+indices = tf.where(x > 30)
+out = tf.gather(x, indices)
 
 ###############################################################################
 # 1e: Create a diagnoal 2-d tensor of size 6 x 6 with the diagonal values of 1,
@@ -77,15 +84,17 @@ out = tf.case({tf.less(x, y): lambda:tf.add(x, y),
 # Hint: Use tf.range() and tf.diag().
 ###############################################################################
 
-# YOUR CODE
+values = tf.range(1, 7)
+out = tf.diag(values)
+
 
 ###############################################################################
 # 1f: Create a random 2-d tensor of size 10 x 10 from any distribution.
 # Calculate its determinant.
 # Hint: Look at tf.matrix_determinant().
 ###############################################################################
-
-# YOUR CODE
+m = tf.random_normal([10, 10], mean=10, stddev=1)
+out = tf.matrix_determinant(m)
 
 ###############################################################################
 # 1g: Create tensor x with value [5, 2, 3, 5, 10, 6, 2, 3, 4, 2, 1, 1, 0, 9].
@@ -93,7 +102,8 @@ out = tf.case({tf.less(x, y): lambda:tf.add(x, y),
 # Hint: use tf.unique(). Keep in mind that tf.unique() returns a tuple.
 ###############################################################################
 
-# YOUR CODE
+x = tf.constant([5, 2, 3, 5, 10, 6, 2, 3, 4, 2, 1, 1, 0, 9])
+unique_values, indices = tf.unique(x)
 
 ###############################################################################
 # 1h: Create two tensors x and y of shape 300 from any normal distribution,
@@ -104,5 +114,9 @@ out = tf.case({tf.less(x, y): lambda:tf.add(x, y),
 # - The sum of absolute value of all elements in the tensor (x - y) otherwise.
 # Hint: see the Huber loss function in the lecture slides 3.
 ###############################################################################
-
+x = tf.random_normal([300], mean=5, stddev=1)
+y = tf.random_normal([300], mean=5, stddev=1)
+average = tf.reduce_mean(x-y)
+condition = tf.less(average, 0)
+tf.select(condition, tf.reduce_mean(tf.square(x-y)), tf.reduce_sum(tf.abs(x -y)))
 # YOUR CODE
