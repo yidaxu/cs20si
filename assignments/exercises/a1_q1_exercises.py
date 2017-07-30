@@ -14,7 +14,23 @@ import tensorflow as tf
 
 x = tf.random_uniform([])  # Empty array as shape creates a scalar.
 y = tf.random_uniform([])
-out = tf.cond(tf.less(x, y), lambda: tf.add(x, y), lambda: tf.sub(x, y))
+out = tf.cond(tf.greater(x, y), lambda: tf.add(x, y), lambda: tf.subtract(x, y))
+init = tf.global_variables_initializer()
+
+with tf.Session() as sess:
+	sess.run(init)
+	print(x.eval())
+	print(y.eval())
+	c = sess.run(out)
+	print(c)
+
+
+# with tf.Session() as sess:
+# 	sess.run(init)
+# 	c = sess.run(out)
+# 	print(x.eval())
+# 	print(y.eval())
+# 	print(out.eval())
 
 ###############################################################################
 # 1b: Create two 0-d tensors x and y randomly selected from -1 and 1.
@@ -22,7 +38,14 @@ out = tf.cond(tf.less(x, y), lambda: tf.add(x, y), lambda: tf.sub(x, y))
 # Hint: Look up tf.case().
 ###############################################################################
 
-# YOUR CODE
+# x = tf.random_uniform([], -1, 1, dtype=tf.float32)  # don't forget the dtype
+#y = tf.random_uniform([], -1, 1, dtype=tf.float32)
+x = tf.random_uniform([], -1, 1, dtype=tf.float32)
+y = tf.random_uniform([], -1, 1, dtype=tf.float32)
+out = tf.case({tf.less(x, y): lambda:tf.add(x, y), 
+			tf.greater(x, y): lambda:tf.subtract(x,y)},
+			default = lambda:tf.constant(0.0), exclusive = True) # don't forget the exclusive,0.0
+
 
 ###############################################################################
 # 1c: Create the tensor x of the value [[0, -2, -1], [0, 1, 2]] 
@@ -31,7 +54,7 @@ out = tf.cond(tf.less(x, y), lambda: tf.add(x, y), lambda: tf.sub(x, y))
 # Hint: Look up tf.equal().
 ###############################################################################
 
-# YOUR CODE
+
 
 ###############################################################################
 # 1d: Create the tensor x of value 
